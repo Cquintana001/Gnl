@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/25 08:23:19 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/25 12:26:50 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,83 +16,56 @@
 #include <fcntl.h>
 #include <stddef.h>
 
-size_t	ft_strlen(const char *s)
-{	
-	size_t	x;
-
-	x = 0;
-	while (s[x])
-		x++;
-	return (x);
-}
-char	*ft_strdup(const char *s)
-{
-	char	*array;
-	int		x;
-
-	x = ft_strlen(s);
-	array = malloc(x + 1);
-	x = 0;
-	if (!array)
-		return (NULL);
-	else
-	{
-		x = 0;
-		while (s[x] && s[x]!= '\n')
-		{
-			array[x] = s[x];
-			x++;
-		}
-		array[x] = '\0';
-		return (array);
-	}
-}
-char	*ft_strjoin(char const	*s1, char const	*s2)
-{
-	int		x;
-	char	*ptr;
-	int		j;
-
-	j = 0;
-	x = 0;
-	ptr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!ptr)
-		return (NULL);
-	while (s1[x])
-	{
-		ptr[x] = s1[x];
-		x++;
-	}
-	while (s2[j])do
-    {
-        /* code */
-    } while (/* condition */);
-    
-	{
-		ptr[x] = s2[j];
-		x++;
-		j++;
-	}
-	ptr[x] = '\0';
-    
-	return (ptr);
-}
-
 char *get_next_line(int fd)
 {
      
-    char *buf;
+    char static *line;
+	char static *line2;
+	char buf[42];
+	int x;
+	int y;
+	int z;
     ssize_t nr_bytes;
      
-     
-     
-        nr_bytes = read(fd, buf, 42);
+    x = 0;
+	y = 0; 
+	z = 0;
+    line =  malloc(42);
+	line2 = malloc(42);
+	 
+     nr_bytes = read(fd, buf, 42);
+		while(buf[x])
+		{
+			if(buf[x] == '\n')
+			{
+				line[y] = '\n';
+				line[y+1] = '\0';
+				x++;
+				while(buf[x])
+				{
+					line2[z] = buf[x];
+					x++;
+					z++;
+				}
+				line2[z]= '\0';
+				x = 0;
+				printf("La string devuelta es: %s\n", line);
+				printf("Lo que sobra es: %s\n", line2);
+				return(line);
+			}
+			else
+			line[y] = buf[x];
+			x++;
+			y++;
+		}
+		
+           printf("La string devuelta es: %s", line);
+		     
         close(fd);
          
-           printf("La string devuelta es: %s", buf);  
              
              
-    return(buf);     
+    return(line);     
     
  
 }
@@ -100,12 +73,14 @@ int main()
 
 {
     int fd;
-     
-
+    ssize_t nr_bytes;
+	 
+	
     fd = open("/Users/caquinta/Desktop/pruebagnl.txt", O_RDONLY); 
-     
-       get_next_line(fd);
+	 
+	 get_next_line(fd);
+	    
+ 	 
  
-
     return 0;
-}n
+}
