@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/25 14:57:13 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/25 15:54:36 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char *get_next_line(int fd)
 {
 
 	char *line;
-	char static *line2;
+	static char line2[42];
 	char buf[42];
 	int x;
 	int y;
@@ -30,14 +30,15 @@ char *get_next_line(int fd)
 	y = 0;
 	z = 0;
 	line = malloc(300);
-	line2 = malloc(300);
+ 
+	printf("Line2 es: %s\n", line2);
 	while (line2[z])
 	{
-		if (line[z] == '\n')
+		if (line2[z] == '\n')
 		{
-			line[y] = line[z];
+			line[y] = line2[z];
 			line[y + 1] = '\0';
-			return (line);
+			 break;
 		}
 		else
 		{
@@ -75,7 +76,7 @@ char *get_next_line(int fd)
 			}
 		}
 	}
-	close(fd);
+	 
 
 	printf("Lo que sobra es: %s\n", line2);
 	return (line);
@@ -95,5 +96,6 @@ int main()
 		printf("La string devuelta es: %s", get_next_line(fd));
 		x++;
 	}
+	close(fd);
 	return 0;
 }
