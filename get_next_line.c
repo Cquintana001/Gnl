@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/25 14:38:17 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/25 14:57:13 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ char *get_next_line(int fd)
 	z = 0;
 	line = malloc(300);
 	line2 = malloc(300);
-	while(line2[z])
+	while (line2[z])
 	{
-		if(line[z] == '\n')
-		{	
-			line[y]= line[z];
-			line[y +1] ='\0';
-			return(line);
+		if (line[z] == '\n')
+		{
+			line[y] = line[z];
+			line[y + 1] = '\0';
+			return (line);
 		}
 		else
 		{
-		line[y] = line2[z];
-		z++;
-		y++;
+			line[y] = line2[z];
+			z++;
+			y++;
 		}
 	}
 	while (line[y] != '\n')
@@ -66,7 +66,6 @@ char *get_next_line(int fd)
 				}
 				line2[z] = '\0';
 				break;
-				 
 			}
 			else
 			{
@@ -74,11 +73,10 @@ char *get_next_line(int fd)
 				x++;
 				y++;
 			}
-			 
 		}
 	}
 	close(fd);
-	 
+
 	printf("Lo que sobra es: %s\n", line2);
 	return (line);
 }
@@ -92,10 +90,10 @@ int main()
 	x = 0;
 
 	fd = open("/Users/caquinta/Desktop/pruebagnl.txt", O_RDONLY);
-	 while(x<2)
-	 {
-	printf("La string devuelta es: %s", get_next_line(fd));
-	 x++;
-	 }
+	while (x < 2)
+	{
+		printf("La string devuelta es: %s", get_next_line(fd));
+		x++;
+	}
 	return 0;
 }
