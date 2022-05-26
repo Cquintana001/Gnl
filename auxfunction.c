@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   auxfunction.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/26 12:49:25 by caquinta         ###   ########.fr       */
+/*   Created: 2022/05/26 11:10:59 by caquinta          #+#    #+#             */
+/*   Updated: 2022/05/26 16:16:47 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,48 +15,58 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stddef.h>
-void  checkline(char *line2, char *line)
+
+int checkline(char *array) // return index of any '\n' in the string, otherwise return 0
 {
     int z;
-    int y;
-    char *temp;
-    
-    z=0;
-    y=0;
-    while (line2[z])
-	{
-		if (line2[z] == '\n')
-		{
-			line[y] = line2[z];
-			line[y + 1] = '\0';
-            z++;
+    int check;
 
-            while(line2[z])
-            {
-                y = 0;
-                temp[y]=line2[z];
-                z++;
-                y++; 
-            }
-            y=0;
-            z=0;
-            while(temp[y])
-            {
-                line2[z]=temp[y];
-                y++;
-                z++;
-            } 
-			 break;
-		}
-		else
-		{
-			line[y] = line2[z];
-			z++;
-			y++;
-		}
-	}
+    z = 0;
+    check = 0;
+    while (array[z])
+    {
+        if (array[z] == '\n')
+            return (z);
+        z++;
+    }
+    return (0);
+}
+
+void setline(char *array, int index) //trim the string until reach the index
+{
+    int z;
+    char *temp;
+
+    z = 0;
+    index++;
+    while (array[index])
+    {
+        temp[z] = array[index];
+        z++;
+        index++;
+    }
+    z=0;
+    while(temp[z])
+    {
+        array[z] = temp[z];
+        z++;
+    }
+    array[z] = '\0';
+}
+void cpline(char *temp, char *array, int index)
+{
+    int x;
+     
+    x=0;
+    while(x<=index)
+    {
+        temp[x] = array[x];
+        x++;
+    }
      
 }
+
+
 char *get_next_line(int fd)
 {
 
@@ -66,6 +76,7 @@ char *get_next_line(int fd)
 	int x;
 	int y;
 	int z;
+    int index;
 	ssize_t nr_bytes;
 	char *temp;
 	
@@ -73,39 +84,20 @@ char *get_next_line(int fd)
 	y = 0;
 	z = 0;
 	line = malloc(300);
-	 
-	 while (line2[z])
-	{
-		if (line2[z] == '\n')
-		{
-			line[y] = line2[z];
-			 z++;
-			 while(line2[z])
-			 {
-				temp[x] = line2[z];
-				x++;
-				z++; 
-			 }
-			 x=0;
-			 z=0;
-			 while(temp[x])
-			 {
-				 line2[z]= temp[x];
-				 x++;
-				 z++;
-			 }
-			 line2[z+1] = '\0';
-			 x = 0;
-			 z=0;
-			 break;
-		}
-		else
-		{
-			line[y] = line2[z];
-			z++;
-			y++;
-		}
-	} 
+    index = checkline(line2);
+    
+	if(index != 0)      
+	 {    
+         cpline(line, line2, index);
+         setline(line2, index);
+         return(line);
+    }
+    while(line2[x])
+    {
+        line[y] = line2[x];
+        x++;
+        y++;
+    }
 	while (line[y] != '\n')
 	{
 		x = 0;
@@ -138,7 +130,7 @@ char *get_next_line(int fd)
 	}
 	 
 line[y + 1] = '\0';
-	printf("Lo que sobra es: %s\n", line2);
+	//printf("Lo que sobra es: %s\n", line2);
 	return (line);
 }
 int main()
