@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/27 10:40:01 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/27 12:33:03 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,61 +16,12 @@
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdio.h>
-
-int checkline(char *array) // return index of any '\n' in the string, otherwise return 0
-{
-    int z;
-    int check;
-
-    z = 0;
-    check = 0;
-    while (array[z])
-    {
-        if (array[z] == '\n')
-            return (z);
-        z++;
-    }
-    return (0);
-}
-void setline(char *array, int index) // trim the string until reach the index
-{
-    int z;
-    char temp[42];
-
-    z = 0;
-    index++;
-    while (array[index])
-    {
-        temp[z] = array[index];
-        z++;
-        index++;
-    }
-    temp[z] = '\0';
-    z = 0;
-    while (temp[z])
-    {
-        array[z] = temp[z];
-        z++;
-    }
-    array[z] = '\0';
-}
-
-int cpline(char *temp, char *array)
-{
-    int x;
-     
-    x=0;
-    while(temp[x])
-    {
-        array[x] = temp[x];
-        x++;
-    }
-    array[x]='\0';
-     return(x);
-}
+#include "get_next_line.h"
+#include <limits.h>
+ 
 char *get_next_line(int fd)
 {
-
+	 
 	char *line;
 	static char line2[BUFFER_SIZE + 1];
 	char buf[BUFFER_SIZE + 1];
@@ -79,14 +30,17 @@ char *get_next_line(int fd)
 	int z;
 	int check;
 	ssize_t nr_bytes;
-	char *temp;
+	//char *temp;
 	
 	x = 0;
 	y = 0;
 	z = 0;
 	check = checkline(line2);
-	printf("check = %d\n", check);
+	 
 	line = malloc(300);
+
+	if(fcntl(fd, F_GETFD) == -1)
+		return (NULL);
 	if(check!=0) 
     {
 		while(x<=check)
@@ -95,7 +49,7 @@ char *get_next_line(int fd)
 			x++;
 		}
 		line[x] ='\0';
-        setline(line2, check); //<= AQUÍ ESTA EL PROBLEMA!!!!!!
+        setline(line2, check);
         return(line);
     }
     else
@@ -105,8 +59,10 @@ char *get_next_line(int fd)
 	{
 		x = 0;
 		nr_bytes = read(fd, buf, BUFFER_SIZE);
+		 
 		if(nr_bytes==0)
-			return(line);
+			return line;
+		
 		buf[nr_bytes] = '\0';
 		while (buf[x])
 		{
@@ -135,10 +91,10 @@ char *get_next_line(int fd)
 	}
 	 
 line[y + 1] = '\0';
-	printf("Lo que sobra es: %s\n", line2);
+	 
 	return (line);
 }
-int main()
+/* int main()
 
 {
 	int fd;
@@ -159,4 +115,4 @@ int main()
 	
 	close(fd);
 	return 0;
-}
+} */

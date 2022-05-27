@@ -18,7 +18,7 @@ int checkline(char *array) // return index of any '\n' in the string, otherwise 
 void setline(char *array, int index) // trim the string until reach the index
 {
     int z;
-    char *temp;
+    char temp[42];
 
     z = 0;
     index++;
@@ -28,6 +28,7 @@ void setline(char *array, int index) // trim the string until reach the index
         z++;
         index++;
     }
+    temp[z] = '\0';
     z = 0;
     while (temp[z])
     {
@@ -37,14 +38,29 @@ void setline(char *array, int index) // trim the string until reach the index
     array[z] = '\0';
 }
 
+int cpline(char *temp, char *array)
+{
+    int x;
+     
+    x=0;
+    while(temp[x])
+    {
+        array[x] = temp[x];
+        x++;
+    }
+    array[x]='\0';
+     return(x);
+}
+ 
 int main()
 {
     int check;
     char array[42] = "HOLA\nHola\nadios\n";
     int x = 0;
-    while (x < 3)
+    while (checkline(array))
     {
         //printf("entraaaa\n");
+
         check = checkline(array);
         printf("El valor de check es: %d\n", check);
 
