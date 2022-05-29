@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/27 11:18:40 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/29 17:42:23 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,16 @@
 #include <stdio.h>
 #include "get_next_line.h"
 
-int checkline(char *array) // return index of any '\n' in the string, otherwise return 0
+int	ft_strlen(const char *s)
+{	
+	int	x;
+
+	x = 0;
+	while (s[x])
+		x++;
+	return (x);
+}
+int checkline(char *array)  
 {
     int z;
     int check;
@@ -28,44 +37,106 @@ int checkline(char *array) // return index of any '\n' in the string, otherwise 
     while (array[z])
     {
         if (array[z] == '\n')
-            return (z);
+            return (1);
         z++;
     }
-    return (0);
+    return (-1);
 }
-void setline(char *array, int index) // trim the string until reach the index
+char  *set_line(char *array)  
 {
     int z;
-    char temp[42];
+    int x;
+    char *temp;
 
     z = 0;
-    index++;
-    while (array[index])
-    {
-        temp[z] = array[index];
+     
+    while (array[z]!='\n' && array[z])       
         z++;
-        index++;
+    x = ft_strlen(array-z);
+    temp = malloc(x +1);
+
+   x = 0;
+   z++;
+    while (array[z])
+    {
+        temp[x] = array[z];
+        z++;
     }
     temp[z] = '\0';
-    z = 0;
-    while (temp[z])
-    {
-        array[z] = temp[z];
-        z++;
-    }
-    array[z] = '\0';
+     
+
+    return(temp);
 }
 
-int cpline(char *temp, char *array)
+  
+char	*ft_strjoin(char	*s1, char 	*s2)
 {
+	int		x;
+	char	*ptr;
+	int		j;
+
+	j = 0;
+	x = 0;
+	ptr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!ptr)
+		return (NULL);
+	while (s1[x])
+	{
+		ptr[x] = s1[x];
+		x++;
+	}
+	while (s2[j])
+	{
+		ptr[x] = s2[j];
+		x++;
+		j++;
+	}
+	ptr[x] = '\0';
+	return (ptr);
+}
+char *read_from_fd(int fd, char *buffer)
+{
+    ssize_t nr_bytes;
+    char buf1[BUFFER_SIZE +1];
+    
+   
+    nr_bytes = read(fd, buf1, BUFFER_SIZE);
+     printf("nrbytes es : %zd\n", nr_bytes);
+    if(nr_bytes == -1)
+        return NULL;
+    else if(nr_bytes == 0)
+     return(buffer);
+     buf1[nr_bytes] = '\0';
+    while (nr_bytes !=0 && nr_bytes != -1)
+    {    
+        buffer= malloc(ft_strlen(buf1) + ft_strlen(buffer));
+        buffer = ft_strjoin(buffer, buf1);
+        if(checkline(buf1)==1)
+            return(buffer);
+        nr_bytes = read(fd, buf1, BUFFER_SIZE);
+         
+    }
+     return (buffer);
+}
+
+char *get_line_to_return(char *buffer)
+{
+    int z;
     int x;
-     
-    x=0;
-    while(temp[x])
+    char *line;
+
+    x = 0;
+    z = 0;   
+    while (buffer[z]!='\n' && buffer[z])         
+        z++;
+    
+    line = malloc(z+1);
+
+    while(x<=z)
     {
-        array[x] = temp[x];
+        line[x] = buffer[x];
         x++;
     }
-    array[x]='\0';
-     return(x);
+    line[x]= '\0';
+    return(line);
 }
