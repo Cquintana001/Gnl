@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/29 17:41:31 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/30 17:49:23 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,27 @@
 char *get_next_line(int fd)
 {
 	 
+	if(fd==-1 || fd>99 || !fd || BUFFER_SIZE <=0)
+		return (NULL);
 	char *line;
 	static char *line2;
-	
+	if(!line2)
+	{
 	line2 = malloc(1);
-	line2[0] = '\0';
-	if(!fd || fd == -1 || BUFFER_SIZE <=0)
-		return (NULL);
+	 
+	}
 	  
 	line2 = read_from_fd(fd, line2);
-	if(!line2)
+	if(line2 == NULL )
+	{	
+		free(line2);
 		return(NULL);
+	}
 	else
 	{
 		line = get_line_to_return(line2);
 		line2 = set_line(line2);
+		 
 		return(line);
 	}
 }
@@ -50,12 +56,16 @@ char *get_next_line(int fd)
 
 	x = 0;
 	 
-	fd = open("/Users/caquinta/Desktop/pruebagnl.txt", O_RDWR);
-	  
+	fd = open("files/multiple_line_with_nl", O_RDWR);
+ 
+	while(x<2)
+	{
 		result = get_next_line(fd);
-		printf("linea %d es %s",x,  result);
-		if (result)
-			free(result);
+		printf("%s",result);
+		free(result);
+		x++;
+	}
+	 
 		 
 	 
 	 
