@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/31 16:25:10 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:36:26 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*read_from_fd(int fd, char *buffer)
 			free(temp);
 		}
 		else
-			buffer = ft_strdup(buf1);
+			buffer = ft_strjoin(buf1, "");
 		x++;
 	}
 	return (buffer);
