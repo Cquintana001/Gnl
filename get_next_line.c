@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/31 10:59:46 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:52:50 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ char *get_next_line(int fd)
 
 	x = 0;
 	 
-	fd = open("/Users/caquinta/francinette/tests/get_next_line/gnlTester/files/big_line_no_nl", O_RDWR);
-	while(x<1)
+	fd = open("/Users/caquinta/francinette/tests/get_next_line/fsoares/1char.txt", O_RDWR);
+	while(x<2)
 	{
 		result = get_next_line(fd);
 		printf("%s",result);

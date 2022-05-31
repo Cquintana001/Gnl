@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/31 10:59:22 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:52:34 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,13 +197,21 @@ char *get_line_to_return(char *buffer)
     char *line;
 
     x = 0;
-    z = 0;   
-    while (buffer[z]!='\n' && buffer[z])         
-        z++;
+    z = 0;
+   
+    while (buffer[z])         
+    {
+        if(buffer[z]=='\n')
+         {   z++;
+            break;
+        }
+      
+      z++;  
+    }     
     
-    line = malloc(z);
+    line = malloc(z+1);
 
-    while(x<=z)
+    while(x<z)
     {
         line[x] = buffer[x];
         x++;
