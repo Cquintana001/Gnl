@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/30 17:44:09 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/31 10:59:22 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,13 @@ char  *set_line(char *array)
     while (array[z]!='\n' && array[z])       
         z++;
     x = ft_strlen(array)-z;
-    temp = malloc(x +1);
+    if (x > 1)
+        temp = malloc(x);
+    else
+    {
+        free(array);
+        return (0);
+    }
 
    x = 0;
    z++;
@@ -65,9 +71,7 @@ char  *set_line(char *array)
     }
     temp[x] = '\0';
     free(array);
-    array = malloc(x+1);
-    array = temp;
-    return(array);
+    return(temp);
 }
 
   
@@ -79,7 +83,7 @@ char	*ft_strjoin(char	*s1, char 	*s2)
      
 	j = 0;
 	x = 0;
-	ptr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	ptr = malloc(ft_strlen(s1) + ft_strlen(s2) +1);
 	if (!ptr)
 		return (NULL);
 	while (s1[x])
@@ -94,7 +98,30 @@ char	*ft_strjoin(char	*s1, char 	*s2)
 		j++;
 	}
 	ptr[x] = '\0';
+    //printf("Longitud ptr es %d\n", ft_strlen(ptr));
 	return (ptr);
+}
+char	*ft_strdup(  char *s)
+{
+	char	*array;
+	int		x;
+
+	x = ft_strlen(s);
+	array = malloc(x +1);
+	x = 0;
+	if (!array)
+		return (NULL);
+	else  
+	{
+		x = 0;
+		while (s[x])
+		{
+			array[x] = s[x];
+			x++;
+		}
+		array[x] = '\0';
+		return (array);
+	}
 }
 /* char *read_from_fd(int fd, char *buffer)
 {
@@ -125,24 +152,41 @@ char *read_from_fd(int fd, char *buffer)
     ssize_t nr_bytes;
     char buf1[BUFFER_SIZE +1];
     char *temp;
-     
-    while(checkline(buffer)==-1 || !buffer)
-    {    
+    int x;
+    x = 0;
+    /* 
+    if (buffer == 0)
+        return (0);*/
+    while(!buffer || checkline(buffer)==-1)
+    {
+        
     nr_bytes = read(fd, buf1, BUFFER_SIZE);
     if(nr_bytes == -1)
         return NULL;
-    if(nr_bytes==0 && buffer[0]=='\0')
-     {   free(buffer);
+    if(nr_bytes==0 && !buffer)
+     {   
+        free(buffer);
         return NULL;
      }
     else if(nr_bytes==0)
         return(buffer);
-    temp = buffer;
-    free(buffer);
+    
+    if (buffer)
+    {
+        temp = ft_strdup(buffer);
+        free(buffer);
+    }
+    else   
+        temp = 0;
     buf1[nr_bytes]='\0';
-     
-    buffer = ft_strjoin(temp, buf1);
-     
+    if (temp)
+    {
+        buffer = ft_strjoin(temp, buf1);
+        free(temp);
+    }
+    else
+        buffer = ft_strjoin(buf1, "");
+     x++;
     }
     return(buffer);
 }
@@ -157,7 +201,7 @@ char *get_line_to_return(char *buffer)
     while (buffer[z]!='\n' && buffer[z])         
         z++;
     
-    line = malloc(z+1);
+    line = malloc(z);
 
     while(x<=z)
     {

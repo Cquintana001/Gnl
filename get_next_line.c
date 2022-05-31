@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/30 17:49:23 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/05/31 10:59:46 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,16 @@
 char *get_next_line(int fd)
 {
 	 
-	if(fd==-1 || fd>99 || !fd || BUFFER_SIZE <=0)
+	if(fd<0 || BUFFER_SIZE <=0)
 		return (NULL);
 	char *line;
 	static char *line2;
+	/*
 	if(!line2)
 	{
 	line2 = malloc(1);
 	 
-	}
+	}*/
 	  
 	line2 = read_from_fd(fd, line2);
 	if(line2 == NULL )
@@ -46,6 +47,7 @@ char *get_next_line(int fd)
 		return(line);
 	}
 }
+
 /* int main()
 
 {
@@ -56,9 +58,8 @@ char *get_next_line(int fd)
 
 	x = 0;
 	 
-	fd = open("files/multiple_line_with_nl", O_RDWR);
- 
-	while(x<2)
+	fd = open("/Users/caquinta/francinette/tests/get_next_line/gnlTester/files/big_line_no_nl", O_RDWR);
+	while(x<1)
 	{
 		result = get_next_line(fd);
 		printf("%s",result);
