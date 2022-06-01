@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/05/31 16:36:26 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/06/01 10:39:08 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,42 +20,30 @@
 #include <limits.h>
 #include <time.h>
 
+
 char	*read_from_fd(int fd, char *buffer)
 {
 	ssize_t		nr_bytes;
 	char		buf1[BUFFER_SIZE + 1];
 	char		*temp;
-	int			x;
 
-	x = 0;
 	while (!buffer || checkline(buffer) == -1)
 	{
 		nr_bytes = read(fd, buf1, BUFFER_SIZE);
-		if (nr_bytes == -1)
+		if (nr_bytes <= 0 && !buffer) 
+		{	free(buffer);
 			return (NULL);
-		if (nr_bytes == 0 && !buffer)
-		{
-			free(buffer);
-			return (NULL);
-		}
+		}		 
 		else if (nr_bytes == 0)
 			return (buffer);
 		if (buffer)
 		{
-			temp = ft_strdup(buffer);
-			free(buffer);
-		}
+			temp = buffer;
+			buf1[nr_bytes] = '\0';
+			buffer = ft_strjoin(buffer, buf1);
+		}		 
 		else
-			temp = 0;
-		buf1[nr_bytes] = '\0';
-		if (temp)
-		{
-			buffer = ft_strjoin(temp, buf1);
-			free(temp);
-		}
-		else
-			buffer = ft_strjoin(buf1, "");
-		x++;
+			buffer = ft_strdup(buf1);
 	}
 	return (buffer);
 }
@@ -105,11 +93,9 @@ char	*set_line(char *array)
 		return (0);
 	}
 	x = 0;
-	z++;
-	while (array[z])
+	while (array[++z])
 	{
 		temp[x] = array[z];
-		z++;
 		x++;
 	}
 	temp[x] = '\0';
@@ -120,8 +106,7 @@ char	*set_line(char *array)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*line2;
-
+	
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line2 = read_from_fd(fd, line2);
