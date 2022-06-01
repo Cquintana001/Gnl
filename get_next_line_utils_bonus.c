@@ -1,57 +1,77 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/07 11:27:29 by user              #+#    #+#             */
-/*   Updated: 2022/04/10 10:53:09 by caquinta         ###   ########.fr       */
+/*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
+/*   Updated: 2022/06/01 13:39:28 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <memory.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <stddef.h>
+#include <stdio.h>
+#include "get_next_line_bonus.h"
 
-char	*ft_strdup(const char *s);
-size_t	ft_strlen(const char *s);
-void	*ft_memcpy(void *restrict dst, const void *restrict src, size_t n);
-
-/*void	ft_print_result(char const *s)
+int	ft_strlen(const char *s)
 {
-	int	len;
+	int	x;
 
-	len = 0;
-	while (s[len])
-		len++;
-	write(1, s, len);
+	x = 0;
+	while (s[x])
+		x++;
+	return (x);
 }
 
-int	main(void)
+int	checkline(char *array)
 {
-	char	str[];
-	char	*str_dup;
-	char	*array;
-	int		x;
-	char	*array;
-	int		x;
+	int	z;
+	int	check;
 
-	str[] = "lorem ipsum dolor sit amet";
-		
-		if (!(str_dup = ft_strdup(str)))
-			ft_print_result("NULL");
-		else
-			ft_print_result(str_dup);
-		if (str_dup == str)
-			ft_print_result("\nstr_dup's adress == str's adress");
-	
-	return (0);
-}*/
-char	*ft_strdup(const char *s)
+	z = 0;
+	check = 0;
+	while (array[z])
+	{
+		if (array[z] == '\n')
+			return (1);
+		z++;
+	}
+	return (-1);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int		x;
+	char	*ptr;
+	int		j;
+
+	j = 0;
+	x = 0;
+	ptr = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!ptr)
+		return (NULL);
+	while (s1[x])
+	{
+		ptr[x] = s1[x];
+		x++;
+	}
+	while (s2[j])
+	{
+		ptr[x] = s2[j];
+		x++;
+		j++;
+	}
+	free(s1);
+	ptr[x] = '\0';
+	return (ptr);
+}
+
+char	*ft_strdup(char *s)
 {
 	char	*array;
 	int		x;

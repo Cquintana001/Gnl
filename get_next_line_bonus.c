@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 17:32:15 by caquinta          #+#    #+#             */
-/*   Updated: 2022/06/01 13:44:13 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/06/01 13:47:18 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdio.h>
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <limits.h>
 #include <time.h>
 
@@ -36,10 +36,10 @@ char	*read_from_fd(int fd, char *buffer)
 		}
 		else if (nr_bytes == 0)
 			return (buffer);
+		buf1[nr_bytes] = '\0';
 		if (buffer)
 		{
 			temp = buffer;
-			buf1[nr_bytes] = '\0';
 			buffer = ft_strjoin(buffer, buf1);
 		}
 		else
@@ -106,20 +106,22 @@ char	*set_line(char *array)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*line2;
+	char		*aux;
+	static char	*line2[OPEN_MAX];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line2 = read_from_fd(fd, line2);
-	if (line2 == NULL)
+	aux = line2[fd];
+	aux = read_from_fd(fd, aux);
+	if (aux == NULL)
 	{
-		free(line2);
+		free(aux);
 		return (NULL);
 	}
 	else
 	{
-		line = get_line_to_return(line2);
-		line2 = set_line(line2);
+		line = get_line_to_return(aux);
+		line2[fd] = set_line(aux);
 		return (line);
 	}
 }
